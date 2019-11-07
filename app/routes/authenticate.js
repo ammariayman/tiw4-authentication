@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const debug = require('debug')('app:authenticate');
 const createError = require('http-errors');
 const db = require('../models/queries');
+const bcrypt = require('bcrypt');
 
 const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
 const jwtExpirySeconds = 60;
@@ -14,30 +15,33 @@ async function authenticateUser(req, res, next) {
 
   debug(`authenticate_user(): attempt from "${login}" with password "${pwd}"`);
   try {
-    const ok = await db.checkUser(login, pwd);
+    bcrypt.hash(pwd, 10, function(err, hash){
+      const ok = await db.checkUser(login, hash);
 
-    if (!ok) next(createError(401, 'Invalid login/password'));
-    else {
-      // inspiration from https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/
-      const payload = {
-        sub: login
-        // fiels 'iat' and 'exp' are automatically filled from  the expiresIn parameter
-      };
+      if (!ok) next(createError(401, 'Invalid login/password'));
+      else {
+        // inspiration from https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/
+        const payload = {
+          sub: login
+          // fiels 'iat' and 'exp' are automatically filled from  the expiresIn parameter
+        };
 
-      const header = {
-        algorithm: 'HS256',
-        expiresIn: jwtExpirySeconds
-      };
+        const header = {
+          algorithm: 'HS256',
+          expiresIn: jwtExpirySeconds
+        };
 
-      // Create a new token
-      const token = jwt.sign(payload, jwtServerKey, header);
-      // Add the jwt into a cookie for further reuse
-      // see https://www.npmjs.com/package/cookie
-      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 2 });
+        // Create a new token
+        const token = jwt.sign(payload, jwtServerKey, header);
+        // Add the jwt into a cookie for further reuse
+        // see https://www.npmjs.com/package/cookie
+        res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 2 });
 
-      debug(`authenticate_user(): "${login}" logged in ("${token}")`);
-      next();
-    }
+        debug(`authenticate_user(): "${login}" logged in ("${token}")`);
+        next();
+      }
+    });
+    
   } catch (e) {
     next(createError(500, e));
   }

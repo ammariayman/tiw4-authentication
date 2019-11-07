@@ -1,6 +1,7 @@
 const express = require('express');
 const createError = require('http-errors');
 const db = require('../models/queries');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -10,8 +11,11 @@ router.get('/', function signupHandler(_req, res, _next) {
 
 router.post('/', async function signupHandler(req, res, next) {
   try {
-    await db.addUser(req.body.username, req.body.email, req.body.password);
-    res.redirect('/');
+    bcrypt.hash(req.body.password, 10, function(err, hash){
+      await db.addUser(req.body.username, req.body.email, hash);
+      res.redirect('/');
+    });
+    
   } catch (e) {
     next(createError(500, e));
   }
