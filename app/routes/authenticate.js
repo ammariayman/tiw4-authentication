@@ -16,7 +16,7 @@ async function authenticateUser(req, res, next) {
   debug(`authenticate_user(): attempt from "${login}" with password "${pwd}"`);
   try {
     bcrypt.hash(pwd, 10, function(err, hash){
-      const ok = await db.checkUser(login, hash);
+      const ok = db.checkUser(login, hash);
 
       if (!ok) next(createError(401, 'Invalid login/password'));
       else {
