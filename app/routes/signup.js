@@ -11,9 +11,9 @@ router.get('/', function signupHandler(_req, res, _next) {
 
 router.post('/', async function signupHandler(req, res, next) {
   try {
-    bcrypt.hash(req.body.password, 10, function(err, hash){
-      await db.addUser(req.body.username, req.body.email, hash);
-      res.redirect('/');
+    bcrypt.hash(req.body.password, 10, function(err, hash){    
+    db.addUser(req.body.username, req.body.email, hash);
+    res.redirect('/');
     });
     
   } catch (e) {
