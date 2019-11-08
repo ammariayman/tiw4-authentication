@@ -13,3 +13,5 @@ async function hashPassword (password) {
   
     return hashedPassword
   }
+
+  module.exports = { hashPassword };
