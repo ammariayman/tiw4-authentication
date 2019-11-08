@@ -11,7 +11,7 @@ router.get('/', function signupHandler(_req, res, _next) {
 
 router.post('/', async function signupHandler(req, res, next) {
   try {
-    const hashedPwd = hashing.hashPassword(req.body.password);
+    const hashedPwd = await hashing.hashPassword(req.body.password);
     await db.addUser(req.body.username, req.body.email, hashedPwd);
     res.redirect('/');
   } catch (e) {

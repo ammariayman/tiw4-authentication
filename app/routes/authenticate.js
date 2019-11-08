@@ -12,7 +12,7 @@ const jwtExpirySeconds = 60;
 async function authenticateUser(req, res, next) {
   const { login } = req.body;
   const pwd = req.body.password;
-  const hashedPwd = hashing.hashPassword(pwd);
+  const hashedPwd = await hashing.hashPassword(pwd);
   debug(`authenticate_user(): attempt from "${login}" with password "${hashedPwd}"`);
   try {
     const ok = await db.checkUser(login, hashedPwd);
