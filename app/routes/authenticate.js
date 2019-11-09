@@ -12,10 +12,18 @@ const jwtExpirySeconds = 60;
 async function authenticateUser(req, res, next) {
   const { login } = req.body;
   const pwd = req.body.password;
-  const hashedPwd = await hashing.hashPassword(pwd);
+  //const hashedPwd = await hashing.hashPassword(pwd);
   debug(`authenticate_user(): attempt from "${login}" with password "${hashedPwd}"`);
   try {
-    const ok = await db.checkUser(login, hashedPwd);
+
+    /***************************************** */
+
+    const user = await db.selectUser(login);
+
+    const ok = await hashing.comparePassword(pwd, user.password);
+
+    /***************************************** */
+    //const ok = await db.checkUser(login, hashedPwd);
 
     if (!ok) next(createError(401, 'Invalid login/password'));
     else {

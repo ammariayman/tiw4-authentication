@@ -20,9 +20,25 @@ async function getUsers() {
 // the list of all users
 async function addUser(username, email, pwd) {
   debug(`addUser("${username}", "${email}", "${pwd}")`);
+  const check = await pool.query(
+    'SELECT count(*) FROM users WHERE username = $1;',
+    [username]
+  );
+  if(check < 1){
+    const result = await pool.query(
+      'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
+      [username, email, pwd]
+    );
+    return result;
+  }
+  return null;
+}
+
+async function selectUser(username){
+  debug(`selectUser("${username}")`);
   const result = await pool.query(
-    'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
-    [username, email, pwd]
+    'SELECT username, email, password FROM users WHERE username = $1 ;',
+    [username]
   );
   return result;
 }
@@ -37,4 +53,4 @@ async function checkUser(login, pwd) {
   return result.rowCount === 1;
 }
 
-module.exports = { getUsers, checkUser, addUser };
+module.exports = { getUsers, checkUser, addUser, selectUser };
