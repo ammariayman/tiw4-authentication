@@ -13,7 +13,7 @@ async function authenticateUser(req, res, next) {
   const { login } = req.body;
   const pwd = req.body.password;
   //const hashedPwd = await hashing.hashPassword(pwd);
-  debug(`authenticate_user(): attempt from "${login}" with password "${hashedPwd}"`);
+  debug(`authenticate_user(): attempt from "${login}" with password "${pwd}"`);
   try {
 
     /***************************************** */
