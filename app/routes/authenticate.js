@@ -3,8 +3,10 @@ const debug = require('debug')('app:authenticate');
 const createError = require('http-errors');
 const db = require('../models/queries');
 const hashing = require('../utils/hashing');
+const fs = require('fs');
 
-const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
+// const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
+const jwtServerKey = asKey(crypto.randomBytes(16));
 const jwtExpirySeconds = 60;
 
 // call postgres to verify request's information
@@ -18,18 +20,11 @@ async function authenticateUser(req, res, next) {
   debug(`authenticate_user(): attempt from "${login}" with password "${password}"`);
   try {
 
-    /***************************************** */
-
-    // const { password: loginPassword }  = await db.selectUser(login);
-    // const user = array();
     const user = await db.selectUser(login);
-    // debug(`${user}`);
-
     const userPassword = user[0].password;
     debug(`hashing.comparePassword(): attempt with "${password}" and userPassword "${userPassword}"`);
     const ok = await hashing.comparePassword(password, userPassword);
 
-    /***************************************** */
     //const ok = await db.checkUser(login, hashedPwd);
 
     if (!ok) next(createError(401, 'Invalid login/password'));
@@ -49,7 +44,7 @@ async function authenticateUser(req, res, next) {
       const token = jwt.sign(payload, jwtServerKey, header);
       // Add the jwt into a cookie for further reuse
       // see https://www.npmjs.com/package/cookie
-      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 2 });
+      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 60 });
 
       debug(`authenticate_user(): "${login}" logged in ("${token}")`);
       next();
