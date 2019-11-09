@@ -1,6 +1,7 @@
 const { JWT, JWK : { asKey } } = require('node-jose');
 const debug = require('debug')('app:authenticate');
 const createError = require('http-errors');
+const crypto = require('crypto');
 const db = require('../models/queries');
 const hashing = require('../utils/hashing');
 const fs = require('fs');
