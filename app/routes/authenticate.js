@@ -21,7 +21,7 @@ async function authenticateUser(req, res, next) {
     /***************************************** */
 
     // const { password: loginPassword }  = await db.selectUser(login);
-    const user = array();
+    // const user = array();
     user = await db.selectUser(login);
     debug(`${user}`);
     // const userPassword = user.password;
