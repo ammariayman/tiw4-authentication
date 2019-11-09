@@ -1,4 +1,4 @@
-const { JWT, JWK : { asKey } } = require('jose');
+const { JWT, JWK : { asKey } } = require('node-jose');
 const debug = require('debug')('app:authenticate');
 const createError = require('http-errors');
 const db = require('../models/queries');
