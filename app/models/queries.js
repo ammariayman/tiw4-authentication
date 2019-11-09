@@ -40,7 +40,7 @@ async function selectUser(username){
     'SELECT username, email, password FROM users WHERE username = $1 ;',
     [username]
   );
-  return result;
+  return result.rows;
 }
 
 // Boolean query to check a user/password
