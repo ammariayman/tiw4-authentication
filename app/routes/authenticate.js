@@ -23,9 +23,9 @@ async function authenticateUser(req, res, next) {
     // const { password: loginPassword }  = await db.selectUser(login);
     const user  = await db.selectUser(login);
     debug(user);
-    const {password: loginPassword} = user;
-    debug(`hashing.comparePassword(): attempt with "${password}" and userPassword "${loginPassword}"`);
-    const ok = await hashing.comparePassword(password, loginPassword);
+    const userPassword = user.password;
+    debug(`hashing.comparePassword(): attempt with "${password}" and userPassword "${userPassword}"`);
+    const ok = await hashing.comparePassword(password, userPassword);
 
     /***************************************** */
     //const ok = await db.checkUser(login, hashedPwd);
