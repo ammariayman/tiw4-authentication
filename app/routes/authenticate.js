@@ -11,16 +11,17 @@ const jwtExpirySeconds = 60;
 // if OK, creates a jwt and stores it in a cookie, 401 otherwise
 async function authenticateUser(req, res, next) {
   const  { login } = req.body;
+  const  { password } = req.body;
   // const  pwd  = req.body.password;
-  debug(login);
+  debug(res);
   //const hashedPwd = await hashing.hashPassword(pwd);
-  debug(`authenticate_user(): attempt from "${login}" with password "${pwd}"`);
+  debug(`authenticate_user(): attempt from "${login}" with password "${password}"`);
   try {
 
     /***************************************** */
 
     const user = await db.selectUser(login);
-    debug(`hashing.comparePassword(): attempt with "${pwd}" and userPassword "${user.password}"`);
+    debug(`hashing.comparePassword(): attempt with "${password}" and userPassword "${user.password}"`);
     const ok = await hashing.comparePassword(pwd, user.password);
 
     /***************************************** */
