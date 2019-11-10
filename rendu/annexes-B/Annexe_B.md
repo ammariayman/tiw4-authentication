@@ -52,4 +52,48 @@ Le champ password base de données est limite en 8 caracteres. vu que le hash g�
 Et en exécutant la requête suivante:
 
     ALTER TABLE users ALTER COLUMN password TYPE varchar;
+## Partie 2: Maintien de l'authentification
+La ligne suivante est responsable de la création de la chaine de caractères secrète du token:
+
+    const  jwtServerKey  =  process.env.SECRET_KEY  ||  'secretpassword';
+Dans le code suivant, on déclare la durée de l'authentification:
+
+    const  jwtExpirySeconds  =  60  *  60  *  1000;
+
+#### Authentification
+
+Lors de l'authentification le code suivant est responsable de la création du token JWT
+Le corps du token "payload" ne contient que le login de l'utilisateur authentifie: 
+
+    const  payload  = {
+	    sub:  login,
+    };
+Le header contient le fonction de hashage et la durée de vie du token:
+
+    const  header  = {
+	    algorithm:  'HS256',
+	    expiresIn:  jwtExpirySeconds
+    };
+Le code suivant crée le token depuis les informations précédentes, et le met dans une cookie:
+
+    const  token  =  jwt.sign(payload, jwtServerKey, header);
+    res.cookie('token', token, { maxAge:  jwtExpirySeconds  *  1000  *  60  *  60 });
+#### Verification utilisateur
+Quand l'utilisateur fait une opération, l'application vérifie s'il a un token:
+
+    const { token } =  req.cookies;
+sinon le message suivant est transmis:
+
+    if (!token) {
+	    return  next(createError(401, 'No JWT provided'));
+    }
+L'application recupere le token:
+
+    const  payload  =  jwt.verify(token, jwtServerKey);
+Elle verifie si l'utilisateur proprietaire du token peut acceder a la fonctionnalite demandee:
+
+    if (!payload.sub) next(createError(403, 'User not authorized'));
+    req.user  =  payload.sub;
+    //...
+
 
