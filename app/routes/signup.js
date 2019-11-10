@@ -24,8 +24,20 @@ router.post(
       .isEmail()
       .withMessage('Email is required'),
     check('password')
-      .custom((value, { req }) => {
-        if (value !== req.body.confirmPassword) {
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long')
+      .matches("^(?=.*[a-z])")
+      .withMessage(
+        'Password must contain at least 1 lowercase alphabetical character'
+      )
+      .matches("^(?=.*[A-Z])")
+      .withMessage(
+        'Password must contain at least 1 uppercase alphabetical character'
+      )
+      .matches("^(?=.*[0-9])")
+      .withMessage('The password must contain at least 1 numeric character')
+      .custom((value, req) => {
+        if (value !== req.confirmPassword) {
           throw new Error('Password confirmation is incorrect');
         }
       })
