@@ -96,4 +96,4 @@ Elle verifie si l'utilisateur proprietaire du token peut acceder a la fonctionna
     req.user  =  payload.sub;
     //...
 
-
+La raison du choix de cryptage HS256 pour JWT est du au fait que les tokens sont moins lourd, ce qui le rend plus rapide. Contrairement au RS256, HS256 donne a l'application le contrôle sur qui peur utiliser les tokens du fait de l'utilisation d'une clé secrète.
