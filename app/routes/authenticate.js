@@ -16,19 +16,22 @@ const jwtExpirySeconds = 60 * 60 * 1000;
 // call postgres to verify request's information
 // if OK, creates a jwt and stores it in a cookie, 401 otherwise
 async function authenticateUser(req, res, next) {
-  const  { login } = req.body;
-  const  { password } = req.body;
+  const { login } = req.body;
+  const { password } = req.body;
   // const  pwd  = req.body.password;
   // debug(res);
-  debug(`authenticate_user(): attempt from "${login}" with password "${password}"`);
+  debug(
+    `authenticate_user(): attempt from "${login}" with password "${password}"`
+  );
   try {
-
     const user = await db.selectUser(login);
     const userPassword = user[0].password;
-    debug(`hashing.comparePassword(): attempt with "${password}" and userPassword "${userPassword}"`);
+    debug(
+      `hashing.comparePassword(): attempt with "${password}" and userPassword "${userPassword}"`
+    );
     const ok = await hashing.comparePassword(password, userPassword);
 
-    //const ok = await db.checkUser(login, hashedPwd);
+    // const ok = await db.checkUser(login, hashedPwd);
 
     if (!ok) next(createError(401, 'Invalid login/password'));
     else {
@@ -51,7 +54,7 @@ async function authenticateUser(req, res, next) {
 
       debug(`authenticate_user(): "${login}" logged in ("${token}")`);
       next();
-    }    
+    }
   } catch (e) {
     next(createError(500, e));
   }
