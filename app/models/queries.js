@@ -23,7 +23,7 @@ async function addUser(username, email, pwd) {
   const check = await pool.query(
     'SELECT count(*) FROM users WHERE username = $1;',
     [username]
-  );
+  ).rowCount;
   debug(`Check: "${check}"`);
   if(check < 1){
     const result = await pool.query(
