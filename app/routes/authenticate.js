@@ -6,11 +6,11 @@ const crypto = require('crypto');
 const db = require('../models/queries');
 const hashing = require('../utils/hashing');
 
-// const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
-const passPhrase = crypto.randomBytes(16);
-const secret = await crypto.createHmac('sha256', passPhrase);
-debug(`Secret random: "${secret}".`);
-const jwtServerKey = asKey(secret);
+const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
+// const secret = crypto.randomBytes(16);
+// const secret = crypto.createHmac('sha256', passPhrase);
+debug(`jwtServerKey: "${jwtServerKey}".`);
+// const jwtServerKey = asKey(secret);
 const jwtExpirySeconds = 60;
 
 // call postgres to verify request's information
