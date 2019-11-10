@@ -1,4 +1,5 @@
-const { jwt, JWK : { asKey } } = require('node-jose');
+const { JWK : { asKey } } = require('node-jose');
+const jwt = require('jsonwebtoken');
 const debug = require('debug')('app:authenticate');
 const createError = require('http-errors');
 const crypto = require('crypto');
