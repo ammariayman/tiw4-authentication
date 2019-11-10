@@ -36,6 +36,7 @@ async function addUser(username, email, pwd) {
     );
     return result;
   }
+  debug(`Username: "${check.username}" already exists.`);
   return null;
 }
 
