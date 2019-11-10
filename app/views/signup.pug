@@ -11,6 +11,11 @@ block content
       .col-md-6.col-md-offset-3
         h1.display-4.m-b-2 Sign Up
 
+        if errors 
+          ul
+            for error in errors
+              li.error!= error.msg
+
         // register form, courtesy of https://teamtreehouse.com/library/creating-a-registration-form-with-pug-jade-2
         form(method='POST' action='/signup')
           div.form-group
