@@ -27,8 +27,8 @@ async function addUser(username, email, pwd) {
   
   const rows = result.rows.length;
   debug(`rows: "${rows}"`);
-  const check = result.rows[0];
-  debug(`Check: "${check.username}"`);
+  
+  // debug(`Check: "${check.username}"`);
   if(rows < 1){
     const result = await pool.query(
       'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
@@ -36,6 +36,7 @@ async function addUser(username, email, pwd) {
     );
     return result;
   }
+  const check = result.rows[0];
   debug(`Username: "${check.username}" already exists.`);
   return null;
 }
