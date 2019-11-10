@@ -48,7 +48,7 @@ async function authenticateUser(req, res, next) {
       const token = jwt.sign(payload, jwtServerKey, header);
       // Add the jwt into a cookie for further reuse
       // see https://www.npmjs.com/package/cookie
-      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 60 });
+      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 60 * 60 });
 
       debug(`authenticate_user(): "${login}" logged in ("${token}")`);
       next();
