@@ -7,7 +7,9 @@ const db = require('../models/queries');
 const hashing = require('../utils/hashing');
 
 // const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
-const jwtServerKey = asKey(crypto.randomBytes(16), "json");
+const crypt = crypto.randomBytes(16);
+debug(`Crypt random: "${crypt}".`);
+const jwtServerKey = asKey(crypt, "json");
 const jwtExpirySeconds = 60;
 
 // call postgres to verify request's information
