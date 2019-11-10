@@ -28,7 +28,7 @@ async function addUser(username, email, pwd) {
   const rows = result.rows;
   debug(`rows: "${rows}"`);
   const check = rows[0];
-  debug(`Check: "${check}"`);
+  debug(`Check: "${check.username}"`);
   if(rows.length < 1){
     const result = await pool.query(
       'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
