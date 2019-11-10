@@ -22,7 +22,8 @@ router.post(
       .trim(),
     check('email')
       .isEmail()
-      .withMessage('Email is required'),
+      .withMessage('Email is required')
+      .trim(),
     check('password')
       .isLength({ min: 8 })
       .withMessage('Password must be at least 8 characters long')
@@ -36,10 +37,11 @@ router.post(
       )
       .matches("^(?=.*[0-9])")
       .withMessage('The password must contain at least 1 numeric character')
-      .custom((value, req) => {
-        if (value !== req.confirmPassword) {
+      .custom((value, { req }) => {
+        if (value !== req.body.confirmPassword) {
           throw new Error('Password confirmation is incorrect');
         }
+        return true;
       })
   ],
   async function signupHandler(req, res, next) {
