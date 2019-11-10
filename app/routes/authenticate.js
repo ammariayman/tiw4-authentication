@@ -11,7 +11,7 @@ const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
 // const secret = crypto.createHmac('sha256', passPhrase);
 debug(`jwtServerKey: "${jwtServerKey}".`);
 // const jwtServerKey = asKey(secret);
-const jwtExpirySeconds = 60;
+const jwtExpirySeconds = 60 * 60;
 
 // call postgres to verify request's information
 // if OK, creates a jwt and stores it in a cookie, 401 otherwise
@@ -35,8 +35,9 @@ async function authenticateUser(req, res, next) {
     else {
       // inspiration from https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/
       const payload = {
-        sub: login
+        sub: login,
         // fiels 'iat' and 'exp' are automatically filled from  the expiresIn parameter
+        exp: jwtExpirySeconds * 1000
       };
 
       const header = {
