@@ -6,12 +6,12 @@ const crypto = require('crypto');
 const db = require('../models/queries');
 const hashing = require('../utils/hashing');
 
-// const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
-const passPhrase = crypto.randomBytes(16);
-const secret = crypto.createHmac('sha256', passPhrase);
-debug(`Secret random: "${secret}".`);
-const jwtServerKey = asKey(secret);
-const jwtExpirySeconds = 60;
+const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
+// const secret = crypto.randomBytes(16);
+// const secret = crypto.createHmac('sha256', passPhrase);
+debug(`jwtServerKey: "${jwtServerKey}".`);
+// const jwtServerKey = asKey(secret);
+const jwtExpirySeconds = 60 * 60 * 1000;
 
 // call postgres to verify request's information
 // if OK, creates a jwt and stores it in a cookie, 401 otherwise
@@ -20,7 +20,6 @@ async function authenticateUser(req, res, next) {
   const { password } = req.body;
   // const  pwd  = req.body.password;
   // debug(res);
-  // const hashedPwd = await hashing.hashPassword(pwd);
   debug(
     `authenticate_user(): attempt from "${login}" with password "${password}"`
   );
@@ -38,7 +37,7 @@ async function authenticateUser(req, res, next) {
     else {
       // inspiration from https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/
       const payload = {
-        sub: login
+        sub: login,
         // fiels 'iat' and 'exp' are automatically filled from  the expiresIn parameter
       };
 
@@ -51,7 +50,7 @@ async function authenticateUser(req, res, next) {
       const token = jwt.sign(payload, jwtServerKey, header);
       // Add the jwt into a cookie for further reuse
       // see https://www.npmjs.com/package/cookie
-      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 60 });
+      res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 * 60 * 60 });
 
       debug(`authenticate_user(): "${login}" logged in ("${token}")`);
       next();
