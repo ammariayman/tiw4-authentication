@@ -5,11 +5,11 @@ Informations adminsitratives
 ----------------------------
 
 * Membres du binôme
-  * NOM Prenom numéro_etu
-  * NOM Prenom numéro_etu
-* IP fournie : 192.168.X.Y
+  * AMMARI Ayman p1926956
+  * ZOHDI Karim p1926304
+* IP fournie : 192.168.76.205
 * Dépôt git de votre fork
-  * <https://forge.univ-lyon1.fr/COMPTE/PROJET.git>
+  * https://github.com/ammariayman/tiw4-authentication
 
 Remarques/commentaires
 ----------------------
