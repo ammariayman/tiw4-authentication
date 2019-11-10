@@ -21,7 +21,7 @@ async function getUsers() {
 async function addUser(username, email, pwd) {
   debug(`addUser("${username}", "${email}", "${pwd}")`);
   const result = await pool.query(
-    'SELECT count(*) FROM users WHERE username = $1;',
+    'SELECT * FROM users WHERE username = $1;',
     [username]
   );
   
@@ -29,7 +29,7 @@ async function addUser(username, email, pwd) {
   debug(`rows: "${rows}"`);
   const check = rows[0];
   debug(`Check: "${check}"`);
-  if(check < 1){
+  if(rows.length < 1){
     const result = await pool.query(
       'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
       [username, email, pwd]
