@@ -20,10 +20,11 @@ async function getUsers() {
 // the list of all users
 async function addUser(username, email, pwd) {
   debug(`addUser("${username}", "${email}", "${pwd}")`);
-  const check = await pool.query(
+  const rows = await pool.query(
     'SELECT count(*) FROM users WHERE username = $1;',
     [username]
-  ).rowCount;
+  ).rows;
+  const check = rows[0];
   debug(`Check: "${check}"`);
   if(check < 1){
     const result = await pool.query(
