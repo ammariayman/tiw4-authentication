@@ -20,7 +20,6 @@ async function authenticateUser(req, res, next) {
   const  { password } = req.body;
   // const  pwd  = req.body.password;
   // debug(res);
-  //const hashedPwd = await hashing.hashPassword(pwd);
   debug(`authenticate_user(): attempt from "${login}" with password "${password}"`);
   try {
 
