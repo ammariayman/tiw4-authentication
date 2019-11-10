@@ -8,7 +8,7 @@ const hashing = require('../utils/hashing');
 
 // const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
 const passPhrase = crypto.randomBytes(16);
-const secret = crypto.createHmac('sha256', passPhrase)
+const secret = crypto.createHmac('sha256', passPhrase);
 debug(`Secret random: "${secret}".`);
 const jwtServerKey = asKey(secret);
 const jwtExpirySeconds = 60;
