@@ -24,6 +24,7 @@ async function addUser(username, email, pwd) {
     'SELECT count(*) FROM users WHERE username = $1;',
     [username]
   );
+  debug(`Check: "${check}"`);
   if(check < 1){
     const result = await pool.query(
       'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
