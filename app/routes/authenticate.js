@@ -11,7 +11,7 @@ const jwtServerKey = process.env.SECRET_KEY || 'secretpassword';
 // const secret = crypto.createHmac('sha256', passPhrase);
 debug(`jwtServerKey: "${jwtServerKey}".`);
 // const jwtServerKey = asKey(secret);
-const jwtExpirySeconds = 60 * 60;
+const jwtExpirySeconds = 60 * 60 * 1000;
 
 // call postgres to verify request's information
 // if OK, creates a jwt and stores it in a cookie, 401 otherwise
@@ -37,7 +37,6 @@ async function authenticateUser(req, res, next) {
       const payload = {
         sub: login,
         // fiels 'iat' and 'exp' are automatically filled from  the expiresIn parameter
-        exp: jwtExpirySeconds * 1000
       };
 
       const header = {
