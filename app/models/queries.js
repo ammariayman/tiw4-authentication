@@ -24,12 +24,12 @@ async function addUser(username, email, pwd) {
     'SELECT username FROM users WHERE username = $1;',
     [username]
   );
-  
+
   const rows = result.rows.length;
   debug(`rows: "${rows}"`);
-  
+
   // debug(`Check: "${check.username}"`);
-  if(rows < 1){
+  if (rows < 1) {
     const result = await pool.query(
       'INSERT INTO users(username, email, password) VALUES ($1, $2, $3);',
       [username, email, pwd]
@@ -41,7 +41,7 @@ async function addUser(username, email, pwd) {
   return null;
 }
 
-async function selectUser(username){
+async function selectUser(username) {
   debug(`selectUser("${username}")`);
   const result = await pool.query(
     'SELECT username, email, password FROM users WHERE username = $1 ;',
