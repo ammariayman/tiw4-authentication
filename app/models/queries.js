@@ -17,11 +17,11 @@ async function getUsers() {
   return result.rows;
 }
 
-// the list of all users
+// add user
 async function addUser(username, email, pwd) {
   debug(`addUser("${username}", "${email}", "${pwd}")`);
   const result = await pool.query(
-    'SELECT * FROM users WHERE username = $1;',
+    'SELECT username FROM users WHERE username = $1;',
     [username]
   );
   
