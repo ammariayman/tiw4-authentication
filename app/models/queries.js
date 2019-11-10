@@ -26,7 +26,7 @@ async function addUser(username, email, pwd) {
   );
   
   const rows = result.rows;
-  debug(`rows: "${rows}"`);
+  debug(`rows: "${rows.length}"`);
   const check = rows[0];
   debug(`Check: "${check.username}"`);
   if(rows.length < 1){
